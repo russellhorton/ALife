@@ -3,6 +3,8 @@
 /// <reference path="Animal.js"/>
 /// <reference path="God.js"/>
 
+// why doens't my intellisense work!?
+
 var Herbivore = function() {
 	this.init = function(chromosome) {		
 
