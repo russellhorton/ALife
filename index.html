@@ -1,0 +1,82 @@
+	<html>
+
+	<style>
+		.world {width : 500; height: 500; background-color: green; position:absolute;}
+		.animal {position:absolute; width:2px; height:2px; background-color:black;}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script type="text/javascript" src="js/lib/snap.svg-min.js"></script>
+	<script type ="text/javascript">
+
+		var s;		
+		var animals = {};
+
+		var AnimalRendering = function() {
+			var Id = '';
+			var Shape = '';
+		}
+
+		function GetAnimalShapeRelativeToCoordinates(relativeShape, location) {
+			var shape = [];
+			if (relativeShape == undefined) {
+				console.log("undefined");
+			}
+        	for (var coordinate = 0; coordinate < relativeShape.length; coordinate += 2) {
+        		var x = (relativeShape[coordinate] + location.X);
+        		var y = (relativeShape[coordinate+1] + location.Y);
+        		shape.push(x);
+        		shape.push(y);
+        	}
+
+        	return shape;
+		}
+
+		function startWorker() {		
+		    if(typeof(Worker) !== "undefined") {
+		        if(typeof(w) == "undefined") {
+		            w = new Worker("js/God.js");
+		        }
+		        w.onmessage = function(event) {
+		            //console.log("from thread: " + event.data);
+		            var data = JSON.parse(event.data);
+
+		            if (typeof(animals[data.Id]) == "undefined") {
+		            	var animal = new AnimalRendering();
+		            	animal.Id = data.Id;
+		            	//animal.Shape = s.rect(data.Location.X,data.Location.Y, data.Size.X, data.Size.Y);
+		            	
+		            	animal.Shape = s.polygon(GetAnimalShapeRelativeToCoordinates(data.Shape, data.Location));
+		            	animal.Shape.attr({fill: data.Colour})
+		            	animals[data.Id] = animal;
+		            } else {
+		            	//GetAnimalShapeRelativeToCoordinates(data.Shape, data.Location);
+		            	//animals[data.Id].Shape.attr({x:data.Location.X, y:data.Location.Y});//translate(data.Location.X, data.Location.Y);		            
+		            	animals[data.Id].Shape.attr({points:GetAnimalShapeRelativeToCoordinates(data.Shape, data.Location)});
+		            	animals[data.Id].Shape.attr({fill: data.Colour})
+		            }
+
+		        };
+		    } else {
+		        console.log("Failed to create God.");
+		    }
+		}
+
+		$(document).ready(function() {
+
+			s = Snap("#world");
+
+
+			startWorker();
+//
+		});
+		
+
+	</script>
+<head>
+</head>
+<body>
+
+	<svg class="world" id="world" width="500" height="500"></svg>
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+Animal.Carnivor: {
+	Init: function() {
+
+	}
+}
