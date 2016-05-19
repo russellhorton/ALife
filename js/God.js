@@ -1,4 +1,4 @@
-importScripts('lib/chance.min.js', 'Events.js', 'MathsHelper.js', 'Gene.js', 'Chromosome.js','Plant.js','Animal.js', 'Carnivore.js', 'Herbivore.js', 'World.js'); 
+importScripts('lib/chance.min.js','Definitions.js', 'Events.js', 'MathsHelper.js', 'Gene.js', 'Chromosome.js','Plant.js','Animal.js', 'Carnivore.js', 'Herbivore.js', 'World.js'); 
 
 var God = {
 	Options : {
