@@ -453,7 +453,10 @@ var Location = function(x, y) {
 	}
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5e0f18b58537348f403c220627f0f6a3cecae0da
 /*var mum = new Animal();
 var dad = new Animal();
 console.log("mum:  " + mum.Chromosome.toString());
