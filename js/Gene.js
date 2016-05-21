@@ -1,24 +1,5 @@
-var GeneTypes = {
-		Colour : 1,
-		Size : 2,
-		Shape : 3
-	};
-
-var GeneLength = function(geneType) {
-	switch (geneType) {
-		case GeneTypes.Colour : 
-		return 8;
-		
-		case GeneTypes.Size :
-		return 3;
-
-		case GeneTypes.Shape : 
-		return 4;
-
-		default :
-		return 8;
-	}
-}
+/// <reference path="MathsHelper.js"/>
+/// <reference path="Definitions.js"/>
 
 var Gene = function(geneType) {
 	this.GeneType = 0;

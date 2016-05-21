@@ -11,6 +11,9 @@ var Animal = function() {
 	this._Colour = null;
 	this._Size = null;
 	this._Shape = null;
+	this._Speed = null;
+	this._Agression = null;
+	this._Bravery = null;
 	this._Fitness = 0;
 	this._FieldOfVisionRadius = 100;
 	this._HasMated = false;
@@ -92,14 +95,22 @@ var Animal = function() {
 			genes = this.Chromosome.GenesOfType(GeneTypes.Shape);
 
 		for (var n = 0; n < genes.length; n += 1) {
-			
 			var gene = genes[n];
-			
 			shape.push(Number(MathsHelper.ConvertBase(gene.toString(), 2, 10)));
 		}
 
 		this._Shape = shape;
 		return this._Shape;
+	},
+	this.Speed = function() {
+		if (this._Speed != null) {
+			return this._Speed;
+		}
+
+		var genes = this.Chromosome.GenesOfType(GeneTypes.Speed);
+			
+		this._speed = Number(MathsHelper.ConvertBase(genes[0].toString(), 2, 10));
+		return this._speed;	
 	},
 	this.Move = function() {
 
@@ -132,23 +143,24 @@ var Animal = function() {
 
 	};
 	this.MoveRandom = function() {
-		var direction = MathsHelper.GenerateRandomNumber(0, 3);
+		var direction = MathsHelper.GenerateRandomNumber(0, 3),
+			speed = this.Speed();
 
 		switch (direction) {
 			case Direction.North :
-			this.Location.Y = this.Location.Y > 0 ? this.Location.Y -= 1 : God.Hands.World.Options.Height;			
+			this.Location.Y = this.Location.Y > 0 ? this.Location.Y -= speed : God.Hands.World.Options.Height;			
 			break;
 
 			case Direction.South :
-			this.Location.Y = this.Location.Y < God.Hands.World.Options.Height ? this.Location.Y += 1 : 0;
+			this.Location.Y = this.Location.Y < God.Hands.World.Options.Height ? this.Location.Y += speed : 0;
 			break;
 
 			case Direction.East :
-			this.Location.X = this.Location.X < God.Hands.World.Options.Width ? this.Location.X += 1 : 0;			
+			this.Location.X = this.Location.X < God.Hands.World.Options.Width ? this.Location.X += speed : 0;			
 			break;
 
 			case Direction.West :
-			this.Location.X = this.Location.X > 0 ? this.Location.X -= 1 : God.Hands.World.Options.Width;			
+			this.Location.X = this.Location.X > 0 ? this.Location.X -= speed : God.Hands.World.Options.Width;			
 			break;
 
 		}
@@ -156,30 +168,41 @@ var Animal = function() {
 	};
 	this.MoveTowards = function(x, y) {
 
+		var speed = this.Speed(),
+			yOffSet = 0,
+			xOffSet = 0;
+
+		if (this.Location.Y - y < speed) {
+			yOffSet = speed - this.Location.Y;
+		}
+
 		if (this.Location.Y > y) {
-			this.Location.Y -= 1;
+			this.Location.Y -= speed;
 		} else if (this.Location.Y < y) {
-			this.Location.Y += 1;
+			this.Location.Y += speed;
 		}
 
 		if (this.Location.X > x) {
-			this.Location.X -= 1;
+			this.Location.X -= speed;
 		} else if (this.Location.X < x) {
-			this.Location.X +=1 ;
+			this.Location.X +=speed ;
 		}
 		Events.RaiseEvent(Events.Moved, { "detail" :{ "animal" : this }});
 	};
 	this.MoveAway = function(x, y) {
+		
+		var speed = this.Speed();
+		
 		if (this.Location.Y > y) {
-			this.Location.Y += 1;
+			this.Location.Y += speed;
 		} else if (this.Location.Y < y) {
-			this.Location.Y -= 1;
+			this.Location.Y -= speed;
 		}
 
 		if (this.Location.X > x) {
-			this.Location.X += 1;
+			this.Location.X += speed;
 		} else if (this.Location.X < X) {
-			this.Location.X -=1 ;
+			this.Location.X -=speed ;
 		}
 		Events.RaiseEvent(Events.Moved, { "detail" :{ "animal" : this }});
 	};
@@ -430,24 +453,6 @@ var Location = function(x, y) {
 	}
 }
 
-var Direction = {
-	North: 0,
-	South: 1,
-	East: 2,
-	West: 3
-}
-
-var Species = {
-	Carnivore: "Carnivore",
-	Herbivore: "Herbivore",
-	Plant: "Plant"
-}
-
-var Actions = {
-	Move: 1,
-	MoveTowards: 2,
-	MoveAway: 3
-}
 
 /*var mum = new Animal();
 var dad = new Animal();

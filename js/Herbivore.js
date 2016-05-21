@@ -2,10 +2,9 @@
 /// <reference path="Gene.js"/>
 /// <reference path="Animal.js"/>
 /// <reference path="God.js"/>
+/// <reference path="Definitions.js"/>
 
-// why doens't my intellisense work! 
-
-var Herbivore = function() {
+var Herbivore = function(chromosome) {
 	this.init = function(chromosome) {		
 
 		this.initAnimal(chromosome);
@@ -126,7 +125,7 @@ var Herbivore = function() {
 		return preditor;
 
 	};
-	this.init();
+	this.init(chromosome);
 };
 Herbivore.prototype = new Animal();
 
